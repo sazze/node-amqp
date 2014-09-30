@@ -80,19 +80,6 @@ describe('publisher', function () {
     expect(publisher.bindExchange).to.be.a('function');
     expect(publisher).to.have.property('publish');
     expect(publisher.publish).to.be.a('function');
-    expect(publisher).to.have.property('drainQueue');
-    expect(publisher.drainQueue).to.be.a('function');
-  });
-
-  it('should queue messages when not connected', function () {
-    var publisher = new amqp.publisher();
-
-    publisher.publish('test');
-
-    expect(publisher._queue.length).to.equal(1);
-    expect(publisher._drainTimeout).to.not.equal(null);
-
-    clearTimeout(publisher._drainTimeout);
   });
 
   it('should connect/disconnect to/from amqp server', function (done) {
@@ -122,8 +109,6 @@ describe('publisher', function () {
         expect(true).to.equal(false);
       });
 
-      expect(publisher._queue.length).to.equal(0);
-
       publisher.close(done);
     });
   });
@@ -134,12 +119,33 @@ describe('publisher', function () {
     publisher.connect(function () {
       publisher.publish('test', function (err, ok) {
         expect(err).to.equal(null);
-        console.log(ok);
+
         publisher.close(done);
       });
-
-      expect(publisher._queue.length).to.equal(0);
     });
+  });
+
+  it('should queue messages when not connected', function (done) {
+    var publisher = new amqp.publisher({confirmChannel: true});
+    var messageCount = 0;
+
+    publisher.publish('test1', function (err) {
+      messageCount++;
+
+      expect(messageCount).to.equal(1);
+      expect(err).to.equal(null);
+    });
+
+    publisher.publish('test2', function (err) {
+      messageCount++;
+
+      expect(messageCount).to.equal(2);
+      expect(err).to.equal(null);
+
+      publisher.close(done);
+    });
+
+    publisher.connect();
   });
 });
 
