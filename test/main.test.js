@@ -105,11 +105,11 @@ describe('publisher', function () {
 
     publisher.connect(function () {
       publisher.publish('test', function (err) {
-        // this should never be called (only for confirm channels)
-        expect(true).to.equal(false);
-      });
+        // there should never be an error without using a confirm channel
+        expect(_.isUndefined(err)).to.equal(true);
 
-      publisher.close(done);
+        publisher.close(done);
+      });
     });
   });
 
@@ -240,13 +240,11 @@ describe('message patterns', function () {
       expect(messageCount).to.be.at.most(2);
 
       if (messageCount == 2) {
-        setTimeout(function () {
-          publisher.close(function () {
-            consumer.stop(function () {
-              consumer2.stop(done);
-            });
+        publisher.close(function () {
+          consumer.stop(function () {
+            consumer2.stop(done);
           });
-        }, 50);
+        });
       }
     };
 
