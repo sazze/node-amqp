@@ -1,6 +1,6 @@
 {
   "name": "sz-amqp",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "An amqp client",
   "main": "./amqp.js",
   "homepage": "https://gitlab.sazze.com/nodejs/sz-amqp",
