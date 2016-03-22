@@ -1,7 +1,7 @@
 Usage
 ============================
 ```javascript
-var amqp = require('sz-amqp');
+var amqp = require('@sazze/amqp');
 
 var publisher = new amqp.publisher();
 
@@ -11,7 +11,7 @@ publisher.publish('test');
 ```
 
 ```javascript
-var amqp = require('sz-amqp');
+var amqp = require('@sazze/amqp');
 
 var consumer = new amqp.consumer(function (content, channel, message) {
   // recieved message
@@ -22,7 +22,7 @@ consumer.start();
 
 Install
 ============================
-``` npm install sz-amqp ```
+``` npm install @sazze/amqp ```
 
 Tests
 ============================

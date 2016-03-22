@@ -1,21 +1,18 @@
 {
-  "name": "sz-amqp",
-  "version": "1.2.3",
+  "name": "@sazze/amqp",
+  "version": "1.3.0",
   "description": "An amqp client",
   "main": "./amqp.js",
-  "homepage": "https://gitlab.sazze.com/nodejs/sz-amqp",
+  "homepage": "https://github.com/sazze/node-amqp",
   "scripts": {
     "test": "make test"
   },
   "engines": {
     "node": ">=0.8.x"
   },
-  "publishConfig": {
-    "registry": "http://npm.sazze.com"
-  },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.sazze.com/nodejs/sz-amqp.git"
+    "url": "https://github.com/sazze/node-amqp.git"
   },
   "dependencies": {
     "amqplib": "^0.2.1",
@@ -25,15 +22,22 @@
     "mocha": "^1.20.1",
     "chai": "^1.9.1"
   },
-  "keywords": [],
+  "keywords": [
+    "rabbitmq",
+    "amqp",
+    "message",
+    "mq",
+    "publish",
+    "consume"
+  ],
   "bugs": {
-    "url": "https://gitlab.sazze.com/nodejs/sz-amqp/issues"
+    "url": "https://github.com/sazze/node-amqp/issues"
   },
   "author": {
     "name": "Craig Thayer",
     "email": "cthayer@sazze.com"
   },
-  "license": "Copyright 2014 by Sazze, Inc.  All rights reserved.",
+  "license": "ISC",
   "contributors": [
     {
       "name": "Craig Thayer",
