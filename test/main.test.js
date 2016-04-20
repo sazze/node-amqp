@@ -1,5 +1,6 @@
 var expect = require('chai').expect;
 var _ = require('lodash');
+var path = require('path');
 
 var amqp = require('../');
 
@@ -82,10 +83,57 @@ describe('publisher', function () {
     expect(publisher.publish).to.be.a('function');
   });
 
+  it('should support TLS', function () {
+    //
+    // publisher
+    //
+    var publisher = new amqp.publisher({port: 5671, ssl: {enable: true}});
+
+    expect(publisher.getUrl()).to.equal('amqps://guest:guest@127.0.0.1:5671/%2F?verify=verify_peer&fail_if_no_peer_cert=true');
+
+    publisher = new amqp.publisher({port: 5671, ssl: {enable: true, cacertfile: '/path/to/ca/cert.pem', certfile: '/path/to/cert.pem', keyfile: '/path/to/key.pem'}});
+
+    expect(publisher.getUrl()).to.equal('amqps://guest:guest@127.0.0.1:5671/%2F?verify=verify_peer&fail_if_no_peer_cert=true&cacertfile=%2Fpath%2Fto%2Fca%2Fcert.pem&certfile=%2Fpath%2Fto%2Fcert.pem&keyfile=%2Fpath%2Fto%2Fkey.pem');
+
+    //
+    // consumer
+    //
+    var consumer = new amqp.consumer({port: 5671, ssl: {enable: true}});
+
+    expect(consumer.getUrl()).to.equal('amqps://guest:guest@127.0.0.1:5671/%2F?verify=verify_peer&fail_if_no_peer_cert=true');
+
+    consumer = new amqp.consumer({port: 5671, ssl: {enable: true, cacertfile: '/path/to/ca/cert.pem', certfile: '/path/to/cert.pem', keyfile: '/path/to/key.pem'}});
+
+    expect(consumer.getUrl()).to.equal('amqps://guest:guest@127.0.0.1:5671/%2F?verify=verify_peer&fail_if_no_peer_cert=true&cacertfile=%2Fpath%2Fto%2Fca%2Fcert.pem&certfile=%2Fpath%2Fto%2Fcert.pem&keyfile=%2Fpath%2Fto%2Fkey.pem');
+  });
+
   it('should connect/disconnect to/from amqp server', function (done) {
     var publisher = new amqp.publisher();
 
     publisher.connect(function () {
+      publisher.close(done);
+    });
+  });
+
+  it('should connect/disconnect to/from amqp server using TLS', function (done) {
+    // this is necessary for node to accept self-signed certs (ok for testing)
+    var NODE_TLS_REJECT_UNAUTHORIZED = process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+    var opts = {
+      port: 5671,
+      ssl: {
+        enable: true
+      }
+    };
+
+    var publisher = new amqp.publisher(opts);
+
+    publisher.connect(function () {
+      // set this environment variable back to what it was before we changed it
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = NODE_TLS_REJECT_UNAUTHORIZED;
+
       publisher.close(done);
     });
   });
