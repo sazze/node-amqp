@@ -33,3 +33,7 @@ Tests
 *******************************************************************
 
 ``` npm test ```
+
+Configuration for rabbitmq is provided in the `test/rabbitmq-config` folder.  Copy or link the contents to the configuration directory of your rabbitmq installation to run the tests.
+
+The passwords for the `p12` files for the server and client certificates are `test-server` and `test-client` respectively.
